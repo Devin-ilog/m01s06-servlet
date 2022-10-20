@@ -17,16 +17,13 @@ public class PessoaServlet extends HttpServlet {
     private static List<Pessoa> pessoas = new ArrayList<>();
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        resp.getWriter().println("Read - Pessoa");
+        resp.getWriter().println(pessoas);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String nome = req.getParameter("nome");
         Integer idade = Integer.parseInt(req.getParameter("idade"));
-
-        System.out.println("Nome: " + nome);
-        System.out.println("Idade: " + idade);
 
         Pessoa pessoa = new Pessoa();
         pessoa.setNome(nome);
@@ -39,12 +36,42 @@ public class PessoaServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("Update - Pessoa");
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        String nome = req.getParameter("nome");
+        Integer idade = Integer.parseInt(req.getParameter("idade"));
+
+        Pessoa pessoa = findById(id);
+        if (pessoa == null) {
+            resp.getWriter().println(false);
+            return;
+        }
+        pessoa.setNome(nome);
+        pessoa.setIdade(idade);
+
+        resp.getWriter().println(pessoa);
     }
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getWriter().println("Delete - Pessoa");
+        Integer id = Integer.parseInt(req.getParameter("id"));
+        Pessoa pessoa = findById(id);
+
+        if (pessoa == null) {
+            resp.getWriter().println(false);
+            return;
+        }
+
+        pessoas.remove(pessoa);
+        resp.getWriter().println(true);
+    }
+
+    private Pessoa findById(Integer id) {
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa.getId() == id) {
+                return pessoa;
+            }
+        }
+        return null;
     }
 
 }

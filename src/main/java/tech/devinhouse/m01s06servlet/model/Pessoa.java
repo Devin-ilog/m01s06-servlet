@@ -1,9 +1,5 @@
 package tech.devinhouse.m01s06servlet.model;
 
-import jakarta.servlet.annotation.HttpMethodConstraint;
-
-import java.math.BigDecimal;
-
 public class Pessoa {
 
     private static Integer SEQUENCIA = 0;
